@@ -1,6 +1,8 @@
 import asyncio
 import logging
+import os
 import re
+from logging.handlers import RotatingFileHandler
 
 from aiogram import Dispatcher, F
 from aiogram.exceptions import TelegramBadRequest
@@ -16,7 +18,12 @@ from core import (GROUP_CHAT_ID, POLL_PORTIONS, bot, bot_username, db, refresh_p
 PLUS_RE = re.compile(r"^\+\s*(\d{1,2})?$")
 MINUS_RE = re.compile(r"^[-−–]\s*1?$")
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+# лог в консоль и в logs/bot.log (5 файлов по 5 МБ)
+os.makedirs("logs", exist_ok=True)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", handlers=[
+    logging.StreamHandler(),
+    RotatingFileHandler("logs/bot.log", maxBytes=5_000_000, backupCount=5, encoding="utf-8"),
+])
 
 dp = Dispatcher()
 # личка сотрудников (профиль, оплата) и панель администратора
