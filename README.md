@@ -24,7 +24,9 @@
 Цена фиксируется на каждый день: если поменять цену, прошлые обеды не пересчитываются.
 
 ## Установка на сервер
-Подробное руководство для системного администратора: [INSTALL.md](INSTALL.md).
+Руководства для системного администратора:
+- Windows: [INSTALL.md](INSTALL.md)
+- Ubuntu + Docker: [INSTALL_DOCKER.md](INSTALL_DOCKER.md)
 
 ## Настройка (кратко)
 1. @BotFather → `/newbot` → получите токен. Там же `/setprivacy` → бот → **Disable** (чтобы бот видел «+» в группе).
@@ -45,8 +47,9 @@
 
 Один токен — один запущенный бот: если запустить второй экземпляр, Telegram выдаст `Conflict: terminated by other getUpdates request`.
 
-## Linux / Docker
+## Docker
 ```
-pip install -r requirements.txt
-python bot.py
+cp .env.example .env   # вписать токен
+docker compose up -d --build
 ```
+Подробно: [INSTALL_DOCKER.md](INSTALL_DOCKER.md).

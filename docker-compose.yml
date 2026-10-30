@@ -1,0 +1,19 @@
+services:
+  bot:
+    build: .
+    image: lunch-bot
+    container_name: lunch-bot
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # перекрывают .env: база обязательно на постоянном диске
+      DB_PATH: /data/lunch.db
+      LOG_DIR: ""
+      TZ: Asia/Tashkent
+    volumes:
+      - ./data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

@@ -18,12 +18,14 @@ from core import (GROUP_CHAT_ID, POLL_PORTIONS, bot, bot_username, db, refresh_p
 PLUS_RE = re.compile(r"^\+\s*(\d{1,2})?$")
 MINUS_RE = re.compile(r"^[-−–]\s*1?$")
 
-# лог в консоль и в logs/bot.log (5 файлов по 5 МБ)
-os.makedirs("logs", exist_ok=True)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", handlers=[
-    logging.StreamHandler(),
-    RotatingFileHandler("logs/bot.log", maxBytes=5_000_000, backupCount=5, encoding="utf-8"),
-])
+# лог в консоль и в файл LOG_DIR/bot.log (5 файлов по 5 МБ); LOG_DIR= пустой — только консоль (Docker)
+LOG_DIR = os.getenv("LOG_DIR", "logs")
+handlers = [logging.StreamHandler()]
+if LOG_DIR:
+    os.makedirs(LOG_DIR, exist_ok=True)
+    handlers.append(RotatingFileHandler(os.path.join(LOG_DIR, "bot.log"), maxBytes=5_000_000, backupCount=5,
+                                        encoding="utf-8"))
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", handlers=handlers)
 
 dp = Dispatcher()
 # личка сотрудников (профиль, оплата) и панель администратора
